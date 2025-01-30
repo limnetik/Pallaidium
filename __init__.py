@@ -5029,29 +5029,29 @@ class SEQUENCER_OT_generate_image(Operator):
                     or image_model_card == "ChuckMcSneed/FLUX.1-dev"
                 ):
 
-                    # from diffusers import FluxPipeline
+                    from diffusers import FluxPipeline, FluxTransformer2DModel
 
-                    from diffusers import BitsAndBytesConfig, FluxTransformer2DModel
+                    # from diffusers import BitsAndBytesConfig, FluxTransformer2DModel
 
-                    nf4_config = BitsAndBytesConfig(
-                        load_in_4bit=True,
-                        bnb_4bit_quant_type="nf4",
-                        bnb_4bit_compute_dtype=torch.bfloat16,
-                    )
-                    model_nf4 = FluxTransformer2DModel.from_pretrained(
-                        image_model_card,
-                        subfolder="transformer",
-                        quantization_config=nf4_config,
-                        torch_dtype=torch.bfloat16,
-                    )
-                    converter = AutoPipelineForImage2Image.from_pretrained(
-                        image_model_card,
-                        transformer=model_nf4,
-                        torch_dtype=torch.bfloat16,
-                        # variant="fp16",
-                        local_files_only=local_files_only,
-                    )
-                    # pipe = FluxPipeline.from_pretrained(image_model_card, transformer=model_nf4, torch_dtype=torch.bfloat16)
+                    # nf4_config = BitsAndBytesConfig(
+                    #     load_in_4bit=True,
+                    #     bnb_4bit_quant_type="nf4",
+                    #     bnb_4bit_compute_dtype=torch.bfloat16,
+                    # )
+                    # model_nf4 = FluxTransformer2DModel.from_pretrained(
+                    #     image_model_card,
+                    #     subfolder="transformer",
+                    #     quantization_config=nf4_config,
+                    #     torch_dtype=torch.bfloat16,
+                    # )
+                    # converter = AutoPipelineForImage2Image.from_pretrained(
+                    #     image_model_card,
+                    #     transformer=model_nf4,
+                    #     torch_dtype=torch.bfloat16,
+                    #     # variant="fp16",
+                    #     local_files_only=local_files_only,
+                    # )
+                    pipe = FluxPipeline.from_pretrained(image_model_card, torch_dtype=torch.bfloat16)
 
                     if gfx_device == "mps":
                         converter.vae.enable_tiling()
@@ -5511,52 +5511,52 @@ class SEQUENCER_OT_generate_image(Operator):
 
             if not do_inpaint and not enabled_items and not do_convert:
 
-                from diffusers import BitsAndBytesConfig, FluxTransformer2DModel
+                # from diffusers import BitsAndBytesConfig, FluxTransformer2DModel
 
-                nf4_config = BitsAndBytesConfig(
-                    load_in_4bit=True,
-                    bnb_4bit_quant_type="nf4",
-                    bnb_4bit_compute_dtype=torch.bfloat16,
-                )
-                model_nf4 = FluxTransformer2DModel.from_pretrained(
-                    image_model_card,
-                    subfolder="transformer",
-                    quantization_config=nf4_config,
-                    torch_dtype=torch.bfloat16,
-                )
+                # nf4_config = BitsAndBytesConfig(
+                #     load_in_4bit=True,
+                #     bnb_4bit_quant_type="nf4",
+                #     bnb_4bit_compute_dtype=torch.bfloat16,
+                # )
+                # model_nf4 = FluxTransformer2DModel.from_pretrained(
+                #     image_model_card,
+                #     subfolder="transformer",
+                #     quantization_config=nf4_config,
+                #     torch_dtype=torch.bfloat16,
+                # )
 
-                pipe = FluxPipeline.from_pretrained(
-                    image_model_card, transformer=model_nf4, torch_dtype=torch.bfloat16
-                )
+                # pipe = FluxPipeline.from_pretrained(
+                #     image_model_card, transformer=model_nf4, torch_dtype=torch.bfloat16
+                # )
 
-                if gfx_device == "mps":
-                    pipe.vae.enable_tiling()
-                elif low_vram():
-                    pipe.enable_sequential_cpu_offload()
-                    pipe.enable_vae_slicing()
-                    pipe.vae.enable_tiling()
-                else:
-                    pipe.enable_model_cpu_offload()
-            else:  # LoRA + img2img
-                from diffusers import BitsAndBytesConfig, FluxTransformer2DModel
+                # if gfx_device == "mps":
+                #     pipe.vae.enable_tiling()
+                # elif low_vram():
+                #     pipe.enable_sequential_cpu_offload()
+                #     pipe.enable_vae_slicing()
+                #     pipe.vae.enable_tiling()
+                # else:
+                #     pipe.enable_model_cpu_offload()
+            # else:  # LoRA + img2img
+                # from diffusers import BitsAndBytesConfig, FluxTransformer2DModel
 
-                nf4_config = BitsAndBytesConfig(
-                    load_in_4bit=True,
-                    bnb_4bit_quant_type="nf4",
-                    bnb_4bit_compute_dtype=torch.bfloat16,
-                )
-                model_nf4 = FluxTransformer2DModel.from_pretrained(
-                    image_model_card,
-                    subfolder="transformer",
-                    quantization_config=nf4_config,
-                    torch_dtype=torch.bfloat16,
-                )
+                # nf4_config = BitsAndBytesConfig(
+                #     load_in_4bit=True,
+                #     bnb_4bit_quant_type="nf4",
+                #     bnb_4bit_compute_dtype=torch.bfloat16,
+                # )
+                # model_nf4 = FluxTransformer2DModel.from_pretrained(
+                #     image_model_card,
+                #     subfolder="transformer",
+                #     quantization_config=nf4_config,
+                #     torch_dtype=torch.bfloat16,
+                # )
 
-                pipe = FluxPipeline.from_pretrained(
-                    image_model_card, transformer=model_nf4, torch_dtype=torch.bfloat16
-                )
+                # pipe = FluxPipeline.from_pretrained(
+                #     image_model_card, transformer=model_nf4, torch_dtype=torch.bfloat16
+                # )
 
-                # pipe = FluxPipeline.from_pretrained(image_model_card, torch_dtype=torch.bfloat16)
+                pipe = FluxPipeline.from_pretrained(image_model_card, torch_dtype=torch.bfloat16)
 
                 if gfx_device == "mps":
                     pipe.vae.enable_tiling()
