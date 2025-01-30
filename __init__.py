@@ -5533,7 +5533,8 @@ class SEQUENCER_OT_generate_image(Operator):
                 if gfx_device == "mps":
                     pipe.vae.enable_tiling()
                 elif low_vram():
-                    pipe.enable_sequential_cpu_offload()
+                    pipe.enable_model_cpu_offload()
+                    # pipe.enable_sequential_cpu_offload()
                     pipe.enable_vae_slicing()
                     pipe.vae.enable_tiling()
                 else:
